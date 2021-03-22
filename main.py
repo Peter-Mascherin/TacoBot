@@ -31,4 +31,4 @@ async def on_message(message):
     if message.content.startswith('$help'):
         await message.reply('My current commands are:\n$hello\n$rnum\n$whoami\n$help',mention_author=False)
 
-client.run("ODIzMzg0MjA0MTgzNzMyMzA0.YFgCTA.q1nJh_scF-kdIiNqDtIMUFGLZSA")
+client.run("oops lol")
