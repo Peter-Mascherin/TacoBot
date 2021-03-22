@@ -2,9 +2,8 @@ from tkinter.constants import *
 import discord
 import random
 import tkinter as tk
-import time
-import threading
-
+import json
+import tokenfile
 
 client = discord.Client()
 
@@ -35,4 +34,6 @@ async def on_message(message):
     if message.content.startswith('$help'):
         await message.reply('My current commands are:\n$hello\n$rnum\n$whoami\n$help',mention_author=False)
 
-client.run("ODIzMzg0MjA0MTgzNzMyMzA0.YFgCTA.uYTQ2lzZJRWHN0OI5AWXcQA9PoU")
+tokendata = json.loads(tokenfile.tokenjson)
+tokenstring = tokendata['token']
+client.run(tokenstring)
