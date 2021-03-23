@@ -1,9 +1,8 @@
-from tkinter.constants import *
+
 import discord
 import random
-import tkinter as tk
-import json
-import tokenfile
+import os
+from keep_alive import keep_alive
 
 client = discord.Client()
 
@@ -14,6 +13,7 @@ def randomnum():
     
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Game(name="Behind you"))
     print('We have logged in as {0.user}'.format(client))
 
 @client.event
@@ -26,14 +26,16 @@ async def on_message(message):
     
     if message.content.startswith('$rnum'):
         answer = str(randomnum())
-        await message.channel.send("Your number is: " + answer)
+        await message.reply("Your number is: " + answer)
     
     if message.content.startswith('$whoami'):
         await message.reply("You are stupid", mention_author=True)
     
     if message.content.startswith('$help'):
         await message.reply('My current commands are:\n$hello\n$rnum\n$whoami\n$help',mention_author=False)
+    
+    if message.content.startswith('$test'):
+        await message.reply('This is a just a testing command. I am alive!')
 
-tokendata = json.loads(tokenfile.tokenjson)
-tokenstring = tokendata['token']
-client.run(tokenstring)
+keep_alive()
+client.run(os.getenv('TOKEN'))
