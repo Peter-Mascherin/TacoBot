@@ -1,14 +1,14 @@
 
-from math import trunc
 import discord
 import random
 import os
-
-from discord.flags import MessageFlags
+import json
 from keep_alive import keep_alive
 
 client = discord.Client()
 commandlist = ['$hello','$rnum','$whoami','$test','$help']
+complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
+print(len(complimentlist))
 
 def randomnum():
     num = random.randint(0,100)
@@ -57,15 +57,17 @@ async def on_message(message):
     if message.content.startswith('$help'):
         helpembed = helpembedmessage()
         botmsg = await message.reply(embed=helpembed,mention_author=True)
-        await botmsg.add_reaction('⬅️')
-        await botmsg.add_reaction('➡️')
         
-    
     if message.content.startswith('$test'):
         await message.reply('This is a just a testing command. I am alive!')
         async for guild in client.fetch_guilds(limit=150):
             print(guild.name)
-        
+    
+    if message.content.startswith('$uwu'):
+        uwuchoice = randomnum()
+        if(uwuchoice == 100):
+            uwuchoice = uwuchoice - 1
+        await message.reply(complimentlist[uwuchoice])
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
