@@ -8,7 +8,6 @@ from keep_alive import keep_alive
 client = discord.Client()
 commandlist = ['$hello','$rnum','$whoami','$test','$help']
 complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
-print(len(complimentlist))
 
 def randomnum():
     num = random.randint(0,100)
@@ -56,7 +55,7 @@ async def on_message(message):
     
     if message.content.startswith('$help'):
         helpembed = helpembedmessage()
-        botmsg = await message.reply(embed=helpembed,mention_author=True)
+        await message.reply(embed=helpembed,mention_author=True)
         
     if message.content.startswith('$test'):
         await message.reply('This is a just a testing command. I am alive!')
@@ -64,10 +63,7 @@ async def on_message(message):
             print(guild.name)
     
     if message.content.startswith('$uwu'):
-        uwuchoice = randomnum()
-        if(uwuchoice == 100):
-            uwuchoice = uwuchoice - 1
-        await message.reply(complimentlist[uwuchoice])
+        await message.reply(complimentlist[random.randint(0,(len(complimentlist)-1))])
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
