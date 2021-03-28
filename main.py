@@ -3,11 +3,20 @@ import discord
 import random
 import os
 import json
+import requests
 from keep_alive import keep_alive
+from discord.ext import commands
 
-client = discord.Client()
+
+client = commands.Bot(command_prefix="$")
 commandlist = ['$hello','$rnum','$whoami','$test','$help']
 complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
+
+def getrandomfact():
+    factrequest = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
+    print(factrequest.status_code)
+    factjson = json.loads(factrequest.text)
+    return factjson['text']
 
 def randomnum():
     num = random.randint(0,100)
@@ -64,6 +73,11 @@ async def on_message(message):
     
     if message.content.startswith('$uwu'):
         await message.reply(complimentlist[random.randint(0,(len(complimentlist)-1))])
+    
+    if message.content.startswith('$fact'):
+        thefact = getrandomfact()
+        await message.reply(thefact)
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
+
