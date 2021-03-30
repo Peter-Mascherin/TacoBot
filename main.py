@@ -14,9 +14,13 @@ complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
 
 def getrandomfact():
     factrequest = requests.get("https://uselessfacts.jsph.pl/random.json?language=en")
-    print(factrequest.status_code)
     factjson = json.loads(factrequest.text)
     return factjson['text']
+
+def getrandomjoke():
+    dadjokerequest = requests.get(url="https://icanhazdadjoke.com/",headers={"Accept":"application/json"})
+    dadjoke = json.loads(dadjokerequest.text)
+    return dadjoke['joke']
 
 def randomnum():
     num = random.randint(0,100)
@@ -77,6 +81,10 @@ async def on_message(message):
     if message.content.startswith('$fact'):
         thefact = getrandomfact()
         await message.reply(thefact)
+    
+    if message.content.startswith('$joke'):
+        thejoke = getrandomjoke()
+        await message.reply(thejoke)
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
