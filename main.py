@@ -1,8 +1,9 @@
 
 import discord
 import random
-import os
 import json
+import os
+from discord.ext.commands import bot
 import requests
 from keep_alive import keep_alive
 from discord.ext import commands
@@ -48,43 +49,58 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name="In Mexico, say $hello"))
     print('We have logged in as {0.user}'.format(client))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
+@client.command(name="test")
+async def testcommand(ctx):
+    await loggingmethod(ctx)
+    await ctx.message.reply("Your command works and the bot is alive")
+
+@client.command(name="hello")
+async def hellocommand(ctx):
+    await loggingmethod(ctx)
+    theembed = helloembedmessage()
+    await ctx.message.channel.send(embed=theembed)
+
+@client.command(name="rnum")
+async def rnumcommand(ctx):
+    await loggingmethod(ctx)
+    answer = str(randomnum())
+    await ctx.message.reply("Your number is: " + answer)
+
+@client.command(name="whoami")
+async def whoamicommand(ctx):
+    await loggingmethod(ctx)
+    await ctx.message.reply("You are " + str(ctx.message.author), mention_author=True)
+
+@client.command(name="helpme")
+async def helpcommand(ctx):
+    await loggingmethod(ctx)
+    helpembed = helpembedmessage()
+    await ctx.message.reply(embed=helpembed,mention_author=True)
+
+@client.command(name="uwu")
+async def uwucommand(ctx):
+    await loggingmethod(ctx)
+    await ctx.message.reply(complimentlist[random.randint(0,(len(complimentlist)-1))])
+
+@client.command(name="fact")
+async def factcommand(ctx):
+    await loggingmethod(ctx)
+    thefact = getrandomfact()
+    await ctx.message.reply(thefact)
+
+@client.command(name="joke")
+async def jokecommand(ctx):
+    await loggingmethod(ctx)
+    thejoke = getrandomjoke()
+    await ctx.message.reply(thejoke)
+
+async def loggingmethod(context):
+    if context.message.author == client.user:
         return
     else:
-        print(message.author , " said: " , message.content , " in " , message.guild)
+        print(context.message.author , " said: " , context.message.content , " in " , context.message.guild)
 
-    if message.content.startswith('$hello'):
-        thembed = helloembedmessage()
-        await message.channel.send(embed=thembed)
-    
-    if message.content.startswith('$rnum'):
-        answer = str(randomnum())
-        await message.reply("Your number is: " + answer)
-    
-    if message.content.startswith('$whoami'):
-        await message.reply("You are " + str(message.author), mention_author=True)
-    
-    if message.content.startswith('$help'):
-        helpembed = helpembedmessage()
-        await message.reply(embed=helpembed,mention_author=True)
-        
-    if message.content.startswith('$test'):
-        await message.reply('This is a just a testing command. I am alive!')
-        async for guild in client.fetch_guilds(limit=150):
-            print(guild.name)
-    
-    if message.content.startswith('$uwu'):
-        await message.reply(complimentlist[random.randint(0,(len(complimentlist)-1))])
-    
-    if message.content.startswith('$fact'):
-        thefact = getrandomfact()
-        await message.reply(thefact)
-    
-    if message.content.startswith('$joke'):
-        thejoke = getrandomjoke()
-        await message.reply(thejoke)
+
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
