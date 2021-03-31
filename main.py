@@ -10,7 +10,7 @@ from discord.ext import commands
 
 
 client = commands.Bot(command_prefix="$")
-commandlist = ['$hello','$rnum','$whoami','$test','$help','$uwu','$fact']
+commandlist = ['$hello','$rnum','$whoami','$test','$helpme','$uwu','$fact','joke','calc']
 complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
 
 def getrandomfact():
@@ -31,7 +31,7 @@ def helloembedmessage():
     embmsg = discord.Embed(title="TacoBot greeting!",description="Hello i am TacoBot, your multipurpose discord bot ready to fufill any task",colour=discord.Colour.green())
     embmsg.set_author(name=client.user,icon_url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
     embmsg.set_thumbnail(url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
-    embmsg.add_field(name="Commands",value="To access a list of commands to use $help\nOne such command you can use is " + commandlist[random.randint(0,len(commandlist) - 1)],inline=True)
+    embmsg.add_field(name="Commands",value="To access a list of commands to use $helpme\nOne such command you can use is " + commandlist[random.randint(0,len(commandlist) - 1)],inline=True)
     embmsg.add_field(name="Support",value="If you need help with anything else please contact my creator, TheMajesticTaco#5235",inline=True)
     embmsg.set_footer(text="TacoBot created by TheMajesticTaco")
     return embmsg
@@ -40,7 +40,7 @@ def helpembedmessage():
     helpemb = discord.Embed(title="Help Screen",desscription="This is a embed help screen to show you the commands and what they do",colour=discord.Colour.blue())
     helpemb.set_author(name=client.user,icon_url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
     helpemb.set_thumbnail(url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
-    helpemb.add_field(name="Command Name",value="$hello,$helpme,$whoami,$rnum,$test,$uwu,$fact",inline=True)
+    helpemb.add_field(name="Command Name",value="$hello,$helpme,$whoami,$rnum,$test,$uwu,$fact,$joke,$calc",inline=True)
     helpemb.add_field(name="Command Description",value="to be added",inline=True)
     return helpemb
     
@@ -93,6 +93,15 @@ async def jokecommand(ctx):
     await loggingmethod(ctx)
     thejoke = getrandomjoke()
     await ctx.message.reply(thejoke)
+
+@client.command(name="calc")
+async def calculatorcommand(ctx,expression):
+    await loggingmethod(ctx)
+    try:
+        resultstring = str(eval(expression))
+    except:
+        resultstring = "Calulation error, please check your expression to fix any errors in expression"
+    await ctx.message.channel.send(expression + " = " + resultstring)
 
 async def loggingmethod(context):
     if context.message.author == client.user:
