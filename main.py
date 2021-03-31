@@ -40,7 +40,7 @@ def helpembedmessage():
     helpemb = discord.Embed(title="Help Screen",desscription="This is a embed help screen to show you the commands and what they do",colour=discord.Colour.blue())
     helpemb.set_author(name=client.user,icon_url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
     helpemb.set_thumbnail(url="https://cdn.discordapp.com/avatars/823384204183732304/68676285840eec1763141ac2abd97373.png?size=256")
-    helpemb.add_field(name="Command Name",value="$hello,$help,$whoami,$rnum,$test,$uwu,$fact",inline=True)
+    helpemb.add_field(name="Command Name",value="$hello,$helpme,$whoami,$rnum,$test,$uwu,$fact",inline=True)
     helpemb.add_field(name="Command Description",value="to be added",inline=True)
     return helpemb
     
