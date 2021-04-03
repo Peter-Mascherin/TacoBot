@@ -3,13 +3,15 @@ import discord
 import random
 import json
 import os
-from discord.ext.commands import bot
+import pymongo
 import requests
 from keep_alive import keep_alive
 from discord.ext import commands
+from tacobotdatabase import TacoBotDb
 
 
 client = commands.Bot(command_prefix="$")
+databseclient = TacoBotDb()
 commandlist = ['$hello','$rnum','$whoami','$test','$helpme','$uwu','$fact','joke','calc']
 complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
 
@@ -108,6 +110,24 @@ async def loggingmethod(context):
         return
     else:
         print(context.message.author , " said: " , context.message.content , " in " , context.message.guild)
+
+@client.command(name="check")
+async def checkcommand(ctx):
+    await loggingmethod(ctx)
+    amount = str(databseclient.getDocuments())
+    await ctx.message.reply("You have " + amount + " document(s) in the database")
+
+@client.command(name="addme")
+async def addmecommand(ctx):
+    await loggingmethod(ctx)
+    discordid = ctx.message.author.id
+    discorduser = ctx.message.author
+    try:
+        databseclient.addDiscordIdTest(discord_id=discordid,discord_user=discorduser)
+        await ctx.message.reply("You have been successfully added!")
+    except:
+        await ctx.message.reply("There has been an error, please try again later")
+    
 
 
 
