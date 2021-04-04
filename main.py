@@ -3,15 +3,14 @@ import discord
 import random
 import json
 import os
-import pymongo
 import requests
 from keep_alive import keep_alive
 from discord.ext import commands
-from tacobotdatabase import TacoBotDb
+from tacobotdatabase import TacoBotEconomy
 
 
 client = commands.Bot(command_prefix="$")
-databseclient = TacoBotDb()
+database_eco = TacoBotEconomy()
 commandlist = ['$hello','$rnum','$whoami','$test','$helpme','$uwu','$fact','joke','calc']
 complimentlist = json.loads(open("compliments.json",encoding="utf8").read())
 
@@ -114,21 +113,19 @@ async def loggingmethod(context):
 @client.command(name="check")
 async def checkcommand(ctx):
     await loggingmethod(ctx)
-    amount = str(databseclient.getDocuments())
+    amount = str(database_eco.getDocuments())
     await ctx.message.reply("You have " + amount + " document(s) in the database")
 
-@client.command(name="addme")
-async def addmecommand(ctx):
-    await loggingmethod(ctx)
-    discordid = ctx.message.author.id
-    discorduser = ctx.message.author
-    try:
-        databseclient.addDiscordIdTest(discord_id=discordid,discord_user=discorduser)
-        await ctx.message.reply("You have been successfully added!")
-    except:
-        await ctx.message.reply("There has been an error, please try again later")
-    
 
+@client.command(name="eco")
+async def ecocommand(ctx,moderaw,money):
+    await loggingmethod(ctx)
+    mode = moderaw.strip().lower()
+    dis_id = ctx.message.author.id
+    dis_name = ctx.message.author
+    if(mode == "add"):
+        theresult = database_eco.addAmount(discord_id=dis_id,discord_name=dis_name,amount=money)
+    await ctx.message.reply("Result of function: " + theresult)
 
 
 keep_alive()
